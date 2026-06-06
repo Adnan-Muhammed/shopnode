@@ -9,8 +9,8 @@ const userSessionHandling=require('../middleware/userSessionHandling')
 
 
 const userManagement=require('../controller/userManagement')  
-router.get('/' ,
-  userSessionHandling.isBlockedNow,  userManagement.home)
+
+router.get('/' ,userSessionHandling.isBlockedNow,  userManagement.home)
 
 
 

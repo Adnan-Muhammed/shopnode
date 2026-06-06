@@ -93,69 +93,76 @@
             <div class="productList">
                 <!--Toolbar-->
           
-                <!--End Toolbar-->
-                <div class="grid-products grid--view-items">
-                    <div class="row" id="orginalList" >
-                        <% product.forEach((product) => { %>
+               <!--End Toolbar-->
+<div class="grid-products grid--view-items">
+    <div class="row" id="orginalList">
+        <% product.forEach((product) => { %>
 
-                        <!-- goodjnijn k -->
-                        <div class="col-6 col-sm-6 col-md-4 col-lg-3 item">
-                            <!-- start product image -->
-                            <div class="product-image">
-                                <!-- start product image -->
-                                <a href="/productdetails/<%=product._id%>">
-                                    <!-- image -->
-                                    <img class="primary blur-up lazyload"  data-src="<%=product.image[0]%>"    src="<%=product.image[0]%>" alt="image" title="product" />
-                                    <!-- End image -->
-                                    <!-- Hover image -->
-                                    <img class="hover blur-up lazyload"  data-src="<%=product.image[1]%>"    src="<%=product.image[0]%>" alt="image" title="product" />
-                                    <!-- End hover image -->
-                                </a>
-                                <!-- end product image -->
+        <div class="col-6 col-sm-6 col-md-4 col-lg-3 item">
 
-                                <!-- Start product button -->
-                               
-                                
-                                <!-- end product button -->
-                            </div>
-                            <!-- end product image -->
+            <!-- start product image -->
+            <div class="product-image">
 
-                            <!--start product details -->
-                            <div class="product-details text-center">
-                                <!-- product name -->
-                                <div class="product-name">
-                                    <a href=""><%=product.name%></a>
-                                </div>
-                                <!-- End product name -->
-                                <!-- product price -->
+                <a href="/productdetails/<%=product._id%>">
 
+                    <!-- primary image -->
+                    <img
+                        class="primary blur-up lazyload"
+                        data-src="<%=product.image[0]%>"
+                        src="<%=product.image[0]%>"
+                        alt="image"
+                        title="product"
+                        style="width:100%; height:280px; object-fit:cover;"
+                    />
 
-                                <% if(product.offerPrice < product.price){%>
-                                    <div class="product-price">
-                                        <span class="price"> <del><%=product.price%></del> </span>
-                                        <br>
-                                        <span class="price"><%= Math.round(product.offerPrice)%></span>
-                                    </div>
-                                <%}else{%>
-                                    <div class="product-price">
-                                        <span class="price"> <%=product.price%></span>
-                                        
-                                    </div>
-                                <%}%>
+                    <!-- hover image -->
+                    <img
+                        class="hover blur-up lazyload"
+                        data-src="<%=product.image[1]%>"
+                        src="<%=product.image[0]%>"
+                        alt="image"
+                        title="product"
+                        style="width:100%; height:280px; object-fit:cover;"
+                    />
 
+                </a>
 
-                                <!-- End product price -->
-                                
-                               
-                            </div>
-                            <!-- End product details -->
-                        </div>
-                       
+            </div>
+            <!-- end product image -->
 
-                        <% }) %>
+            <!-- start product details -->
+            <div class="product-details text-center">
 
-                    </div>
+                <div class="product-name">
+                    <a href=""><%=product.name%></a>
                 </div>
+
+                <% if(product.offerPrice < product.price){ %>
+                    <div class="product-price">
+                        <span class="price"><del><%=product.price%></del></span>
+                        <br>
+                        <span class="price"><%= Math.round(product.offerPrice) %></span>
+                    </div>
+                <% } else { %>
+                    <div class="product-price">
+                        <span class="price"><%=product.price%></span>
+                    </div>
+                <% } %>
+
+            </div>
+            <!-- end product details -->
+
+        </div>
+
+        <% }) %>
+
+    </div>
+</div>
+
+
+
+
+                
             </div>
             
         </div>

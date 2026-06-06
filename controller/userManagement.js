@@ -24,6 +24,7 @@ const home = async (req, res) => {
         let isLogged = null;
         const product = await productDB.find();
         const { primaryCategories, otherCategories } = await fetchCategoryMiddleware.fetchCategories();
+        
 
         if (req.session.user) {
             isLogged = req.session.user.name;
@@ -211,10 +212,7 @@ const userSignupPost = async (req, res) => {
             await userDB.insertMany([user]);
             console.log('adnan.shajahan786@gmail.com' , 'something is checking');
             
-<<<<<<< HEAD
-=======
-    console.log(8);
->>>>>>> save-my-changes
+
 
             const transporter = nodemailer.createTransport({
                 service: 'gmail',
@@ -247,12 +245,7 @@ const userSignupPost = async (req, res) => {
     console.log(13);
 
     } catch (error) {
-<<<<<<< HEAD
-        console.log('kittiye');
-=======
-    console.log(14);
->>>>>>> save-my-changes
-        
+
         res.redirect('/error')
     }
 };
