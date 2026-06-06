@@ -9,172 +9,160 @@
 
 <div id="ProductSection-product-template" class="product-template__container prstyle1 container">
     <!--product-single-->
-    <div  class="product-single">
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                <div class="product-details-img" style="width: 400px; height: 400px;" >
-                    
-                    <div class="product-thumb">
-                        <div id="gallery" class="product-dec-slider-2 product-tab-left">
+    <div class="product-single">
+    <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="product-details-img" style="width: 400px; height: 400px; overflow: hidden; position: relative;">
 
-                             <% productDetails.image.forEach(function(image, index) { %>
+                <div class="product-thumb">
+                    <div id="gallery" class="product-dec-slider-2 product-tab-left">
 
-                              <a data-image="<%= image %>" data-zoom-image="<%= image %>" class="slick-slide slick-cloned" data-slick-index="<%= index - productDetails.image.length %>" aria-hidden="true" tabindex="-1">
-                                <img class="blur-up lazyload" id="image-link"   data-src="<%= image %>" src="<%= image %>" alt="" />
-                              </a>
-                            <% }); %> 
-
-                            
-
-
-
-
-                          </div>
-                    </div>
-
-
-
-
-                     
-
-
-                    <!-- Include your script -->
-         
-                    <div class="zoompr zoompro-wrap product-zoom-right pl-20">
-                        <div class="zoompro-span "  style="width: 350px;  ">
-
-                            <img class="blur-up lazyload zoompro" data-zoom-image="<%= productDetails.image[0] %>" alt="" src="<%= productDetails.image[0] %>" />
-                            <a href="#" class="btn prlightbox" title="Zoom" data-toggle="modal" data-target="#exampleModal">
-                                <!-- <i class="icon anm anm-expand-l-arrows" aria-hidden="true"></i></a> -->
-
-                            
-                                </div>
-                            </div>
-
-                          
-
-                            
-
-                  
-                                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    <div class="lightboximages">
-                        <a href="<%= productDetails.image[0] %>" data-size="1462x2048"></a>
-                        <a href="<%= productDetails.image[1] %>" data-size="1462x2048"></a>
-                        <a href="<%= productDetails.image[2] %>" data-size="1462x2048"></a>
-                        <a href="<%= productDetails.image[3] %>" data-size="1462x2048"></a>
+                        <% productDetails.image.forEach(function(image, index) { %>
+                            <a
+                                data-image="<%= image %>"
+                                data-zoom-image="<%= image %>"
+                                class="slick-slide slick-cloned"
+                                data-slick-index="<%= index - productDetails.image.length %>"
+                                aria-hidden="true"
+                                tabindex="-1"
+                            >
+                                <img
+                                    class="blur-up lazyload"
+                                    id="image-link"
+                                    data-src="<%= image %>"
+                                    src="<%= image %>"
+                                    alt=""
+                                    style="width: 100%; height: 90px; object-fit: cover; object-position: center; display: block;"
+                                />
+                            </a>
+                        <% }); %>
 
                     </div>
-
                 </div>
-                
 
+                <div class="zoompr zoompro-wrap product-zoom-right pl-20">
+                    <div class="zoompro-span" style="width: 350px;">
+                        <img
+                            class="blur-up lazyload zoompro"
+                            data-zoom-image="<%= productDetails.image[0] %>"
+                            alt=""
+                            src="<%= productDetails.image[0] %>"
+                            style="width: 350px; height: 400px; object-fit: cover; object-position: center; display: block;"
+                        />
+                        <a href="#" class="btn prlightbox" title="Zoom" data-toggle="modal" data-target="#exampleModal">
+                        </a>
+                    </div>
+                </div>
 
-                
-                  
-
-
-
+                <div class="lightboximages">
+                    <a href="<%= productDetails.image[0] %>" data-size="1462x2048"></a>
+                    <a href="<%= productDetails.image[1] %>" data-size="1462x2048"></a>
+                    <a href="<%= productDetails.image[2] %>" data-size="1462x2048"></a>
+                    <a href="<%= productDetails.image[3] %>" data-size="1462x2048"></a>
+                </div>
 
             </div>
+        </div>
 
+        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="product-single__meta">
 
+                <h1 class="product-single__title">Product Name: <%= productDetails.name %></h1>
 
+                <div class="product-nav clearfix">
+                    <a href="#" class="next" title="Next">
+                        <i class="fa fa-angle-right" aria-hidden="true"></i>
+                    </a>
+                </div>
 
-            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                    <div class="product-single__meta">
-                        <h1 class="product-single__title">Product Name:<%= productDetails.name %></h1>
-                        <div class="product-nav clearfix">					
-                            <a href="#" class="next" title="Next"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
-                        </div>
-                        <div class="prInfoRow">
-                            <div class="product-stock">
-                                <% if (productDetails.stock <= 0) { %>
-                                    <span class="outstock-msg">Out of Stock</span>
-                                <% } else { %>
-                                    <span class="instock">Stock <%= productDetails.stock %></span>
-                                <% } %>
-                            </div>
-                        </div>
-                        <p class="product-single__price product-single__price-product-template">
-                            <% if (offerPrice< productDetails.price ) { %>
-
-                                <h1><del><%= productDetails.price %>  </del></h1>
-                                <h1><%= Math.round(offerPrice) %></h1>
-                               
-
-                                
-                            <% } else { %>
-                                <span class="product-price__price product-price__price-product-template product-price__sale product-price__sale--single">
-                                    <h1 id="ProductPrice-product-template"><span class="money" >  <%= productDetails.price %>   </span></h1>
-                                </span>
-                            <% } %>
-                        </p>
-                        
-                    <div class="product-single__description rte">
-                        <ul>
-                            <li><%= productDetails.description %></li>
-                            
-                        </ul>
-                    </div>
-                    <form method="post" action="http://annimexweb.com/cart/add" id="product_form_10508262282" accept-charset="UTF-8" class="product-form product-form-product-template hidedropdown" enctype="multipart/form-data">
-                        <div class="swatch clearfix swatch-0 option1" data-option-index="0">
-                            <div class="product-form__item">
-                            </div>
-                        </div>
-                        <div class="swatch clearfix swatch-1 option2" data-option-index="1">
-                        </div>
-                        <!-- Product Action -->
-                        <div class="product-action clearfix">
-                            <div class="product-form__item--quantity">
-                            </div>                                
-                            <div  class="product-form__item--submit">
-                                <!-- <form style="background-color: cadetblue;" class="variants add" action="#" onclick="window.location.href='cart.html'"method="post"> -->
-                                    <%if(locals.session){%>
-                                        <span class="alert" style="color: brown;">out of stock</span>  
-                                    <%}%>
-                                    <div  style="background-color: cadetblue;">
-                                        <a style="background-color: cadetblue; color: beige;"   href="/cart/<%= productDetails._id %>"><button class="btn btn-addto-cart" type="button" tabindex="0">Add To Cart</button></a> 
-                                    </div>
-                                <!-- </form> -->
-                                <%if(locals.wishlistsession){%>
-                                    <span class="alert" style="color: brown;">already added in wishlist</span>  
-                                <%}%>
-                              <br>
-                                <div style="background-color:brown;"  style="margin-top: 10px;" class="shopify-payment-button" data-shopify="payment-button">
-                                    <a  style="background-color:brown;"  href="/wishList/<%= productDetails._id %>"><button class="btn btn-addto-wishList" type="button" tabindex="0">Add To WishList</button></a> 
-                                    <!-- <button type="button" class="shopify-payment-button__button shopify-payment-button__button--unbranded"> <i class="icon anm anm-heart-l" aria-hidden="true"></i>ADD TO WISHLIST</button> -->
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- End Product Action -->
-                    </form>
-                    <div class="display-table shareRow">
-                            <div class="display-table-cell medium-up--one-third">
-                            </div>
-                            <div class="display-table-cell text-right">
-                                
-                            </div>
-                        </div>
+                <div class="prInfoRow">
+                    <div class="product-stock">
+                        <% if (productDetails.stock <= 0) { %>
+                            <span class="outstock-msg">Out of Stock</span>
+                        <% } else { %>
+                            <span class="instock">Stock <%= productDetails.stock %></span>
+                        <% } %>
                     </div>
                 </div>
+
+                <p class="product-single__price product-single__price-product-template">
+                    <% if (offerPrice < productDetails.price) { %>
+                        <h1><del><%= productDetails.price %></del></h1>
+                        <h1><%= Math.round(offerPrice) %></h1>
+                    <% } else { %>
+                        <span class="product-price__price product-price__price-product-template product-price__sale product-price__sale--single">
+                            <h1 id="ProductPrice-product-template">
+                                <span class="money"><%= productDetails.price %></span>
+                            </h1>
+                        </span>
+                    <% } %>
+                </p>
+
+                <div class="product-single__description rte">
+                    <ul>
+                        <li><%= productDetails.description %></li>
+                    </ul>
+                </div>
+
+                <form
+                    method="post"
+                    action="http://annimexweb.com/cart/add"
+                    id="product_form_10508262282"
+                    accept-charset="UTF-8"
+                    class="product-form product-form-product-template hidedropdown"
+                    enctype="multipart/form-data"
+                >
+                    <div class="swatch clearfix swatch-0 option1" data-option-index="0">
+                        <div class="product-form__item"></div>
+                    </div>
+
+                    <div class="swatch clearfix swatch-1 option2" data-option-index="1"></div>
+
+                    <!-- Product Action -->
+                    <div class="product-action clearfix">
+                        <div class="product-form__item--quantity"></div>
+
+                        <div class="product-form__item--submit">
+
+                            <% if (locals.session) { %>
+                                <span class="alert" style="color: brown;">Out of Stock</span>
+                            <% } %>
+
+                            <div style="background-color: cadetblue;">
+                                <a style="background-color: cadetblue; color: beige;" href="/cart/<%= productDetails._id %>">
+                                    <button class="btn btn-addto-cart" type="button" tabindex="0">Add To Cart</button>
+                                </a>
+                            </div>
+
+                            <% if (locals.wishlistsession) { %>
+                                <span class="alert" style="color: brown;">Already added in wishlist</span>
+                            <% } %>
+
+                            <br>
+
+                            <div style="background-color: brown; margin-top: 10px;" class="shopify-payment-button" data-shopify="payment-button">
+                                <a style="background-color: brown;" href="/wishList/<%= productDetails._id %>">
+                                    <button class="btn btn-addto-wishList" type="button" tabindex="0">Add To WishList</button>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- End Product Action -->
+                </form>
+
+                <div class="display-table shareRow">
+                    <div class="display-table-cell medium-up--one-third"></div>
+                    <div class="display-table-cell text-right"></div>
+                </div>
+
+            </div>
         </div>
     </div>
+</div>
+
+
+
     <!--End-product-single-->
     <!--Product Fearure-->
     
