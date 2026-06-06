@@ -1,104 +1,146 @@
 <%-include('header')-%>
+
 <!--Body Content-->
+
 <div id="page-content">
+
   <!--Page Title-->
+
   <div class="page section-header text-center">
+
     <div class="page-title">
+
       <div class="wrapper"><h1 class="page-width">Shopping Cart</h1></div>
+
     </div>
+
   </div>
+
   <!--End Page Title-->
+
   <div class="container">
+
     <div class="row">
+
       <div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
+
         <div class="alert alert-success text-uppercase" role="alert">
+
           <i class="icon anm anm-truck-l icon-large"></i> &nbsp;<strong
             >Congratulations!</strong
           >
           You've got free shipping!
         </div>
+
         <% if(locals.cartItems){%>
+
         <form action="#" method="post" class="cart style2">
+
           <table>
+
             <thead class="cart__row cart__header">
+
               <tr>
+
                 <th colspan="2" class="text-center">Product</th>
+
                 <th class="text-center">Price</th>
+
                 <th class="text-center">current stock</th>
+
                 <th style="width: 180px" class="text-center">Quantity</th>
+
                 <th class="text-right">Total</th>
+
                 <th class="action">&nbsp;</th>
+
               </tr>
+
             </thead>
+
             <tbody>
+
               <% locals.cartItems.forEach(item => { %>
+
               <tr class="cart__row border-bottom line1 cart-flex border-top">
+
                 <td class="cart__image-wrapper cart-flex-item">
+
                   <a href="#">
+
                     <img
+
                       data-product-id="<%= item.productId %>"
+
                       data-images="<%= JSON.stringify(item.images) %>"
-                      class="cart__image"
-                      class="img-fluid mx-auto mb-4"
+
+                      class="cart__image img-fluid mx-auto mb-4"
+
                       src="<%= item.images[1] %>"
+
                       style="width: 100px; height: 100px"
+
                       alt="<%= item.productId %>"
+
                     />
+
                   </a>
-                </td>
-                <td class="cart__meta small--text-left cart-flex-item">
-                  <div class="list-view-item__title">
-                    <a><%= item.name %> </a>
-                  </div>
-                </td>
-                <td
-                  style="text-align: center"
-                  class="cart__price-wrapper cart-flex-item"
-                >
-                  <span
-                    id="unitPrice"
-                    data-product-id="<%= item.productId %>"
-                    class="money"
-                    >₹<%= item.unitPrice %></span
-                  >
-                  <br />
-                  <% if (item.categoryOffer) { %>
-                  <span
-                    >Category Offer: <%= item.categoryOffer.discountPercentage
-                    %>% off for <%= item.categoryOffer.categoryName %></span
-                  >
-                  <% } %>
-                  <br />
-                  <% if (item.productOffer) { %>
-                  <span
-                    >Special Product Offer: <%=
-                    item.productOffer.discountPercentage %>% off
-                  </span>
-                  <% } %>
+
                 </td>
 
-                <td
-                  style="text-align: center"
-                  class="cart__price-wrapper cart-flex-item"
-                >
+                <td class="cart__meta small--text-left cart-flex-item">
+
+                  <div class="list-view-item__title">
+
+                    <a><%= item.name %></a>
+
+                  </div>
+
+                </td>
+
+                <td style="text-align: center" class="cart__price-wrapper cart-flex-item">
+
+                  <span id="unitPrice" data-product-id="<%= item.productId %>" class="money"
+                    >₹<%= item.unitPrice %></span>
+
+                  <br />
+
+                  <% if (item.categoryOffer) { %>
+                  <span>Category Offer: <%= item.categoryOffer.discountPercentage %>% off for <%= item.categoryOffer.categoryName %></span>
+                  <% } %>
+
+                  <br />
+
+                  <% if (item.productOffer) { %>
+                  <span>Special Product Offer: <%= item.productOffer.discountPercentage %>% off</span>
+                  <% } %>
+
+                </td>
+
+                <td style="text-align: center" class="cart__price-wrapper cart-flex-item">
+
                   <span
-                    id="stockElement"
+                    class="stockElement money"
                     data-product-id="<%= item.productId %>"
                     data-product-stock="<%= item.stock %>"
-                    class="money"
-                    ><%= item.stock %></span
-                  >
+                    ><%= item.stock %></span>
+
                 </td>
+
                 <td class="cart__update-wrapper cart-flex-item text-right">
+
                   <div class="cart__qty text-center" style="width: 180px">
+
                     <div class="qtyField">
+
                       <% if (item.stock >= 1) { %>
+
                       <a
                         data-product-id="<%= item.productId %>"
                         class="qtyBtn minus"
                         onclick="qty('minus', '<%= item.productId %>')"
-                        ><i class="icon icon-minus"></i
-                      ></a>
+                        ><i class="icon icon-minus"></i></a>
+
                       <input
                         data-product-id="<%= item.productId %>"
                         data-stock="<%= item.stock %>"
@@ -108,121 +150,126 @@
                         max="<%= item.stock %>"
                         value="<%= item.quantity %>"
                         pattern="[0-9]*"
+                        readonly
                       />
+
                       <a
                         data-product-id="<%= item.productId %>"
                         class="qtyBtn plus"
                         onclick="qty('plus', '<%= item.productId %>')"
-                        ><i class="icon icon-plus"></i
-                      ></a>
+                        ><i class="icon icon-plus"></i></a>
+
                       <% } else { %>
-                      <div style>
-                        <!-- <p style="color: red;">Product stock is less than 1. Please remove it from your cart before checkout.</p> -->
-                      </div>
+                      <div></div>
                       <% } %>
-                      <div
-                        id="alertDiv"
-                        data-product-id="<%= item.productId %>"
-                      >
+
+                      <div id="alertDiv" data-product-id="<%= item.productId %>">
                         <p style="color: darkred"></p>
                       </div>
+
                     </div>
+
                   </div>
+
                 </td>
 
                 <td class="text-right small--hide cart-price">
-                  <% if (item.stock >= 1) { %>
 
-                  <div
-                    id="productPrice"
-                    value="<%= item.price %>"
-                    data-product-id="<%= item.productId%>"
-                  >
+                  <% if (item.stock >= 1) { %>
+                  <div id="productPrice" value="<%= item.price %>" data-product-id="<%= item.productId %>">
                     <span class="money">₹<%= item.price %></span>
                   </div>
-
                   <% } %>
 
                   <div id="alertDiv2" data-product-id="<%= item.productId %>">
                     <p style="color: darkred"></p>
                   </div>
+
                 </td>
+
                 <td class="text-center small--hide">
+
                   <a
                     href=""
                     class="btn btn--secondary cart__remove"
-                    title="Remove tem"
+                    title="Remove item"
                     data-stock="<%= item.stock %>"
                     data-product-id="<%= item.productId %>"
-                    ><i class="icon icon anm anm-times-l"></i
-                  ></a>
+                    ><i class="icon icon anm anm-times-l"></i></a>
+
                 </td>
+
               </tr>
+
               <% }); %>
+
             </tbody>
+
           </table>
+
         </form>
+
       </div>
-      <%} %> <%if(locals.cartItems){%>
+
+      <%} %>
+
+      <%if(locals.cartItems){%>
+
       <div class="container mt-4">
+
         <div class="row">
+
           <div class="col-12 col-sm-12 col-md-4 col-lg-4 mb-4">
+
             <%if(locals.coupons){%>
             <h5>Available Coupons</h5>
-            <%coupons.forEach((coupons)=>{%>
+            <%coupons.forEach((coupon)=>{%>
             <div id="availableCoupons">
               <div class="coupon" data-code="SAVE20">
-                <%=coupons.name%> -<%= coupons.discountValue%>% off
+                <%=coupon.name%> -<%= coupon.discountValue%>% off
               </div>
             </div>
             <hr />
-            <%})%> <%}%>
+            <%})%>
+            <%}%>
+
           </div>
 
           <div class="col-12 col-sm-12 col-md-4 col-lg-4 cart__footer">
+
             <div class="solid-border">
+
               <div id="subTotalDiv" class="row border-bottom pb-2">
-                <span class="col-12 col-sm-6 cart__subtotal-title"
-                  >Subtotal</span
-                >
-                <span id="subTotal" class="col-12 col-sm-6 text-right"
-                  ><span class="money">₹<%= totalPrice %></span></span
-                >
+                <span class="col-12 col-sm-6 cart__subtotal-title">Subtotal</span>
+                <span id="subTotal" class="col-12 col-sm-6 text-right">
+                  <span class="money">₹<%= totalPrice %></span>
+                </span>
               </div>
 
               <div class="row border-bottom pb-2 pt-2">
                 <span class="col-12 col-sm-6 cart__subtotal-title">Tax</span>
-                <span class="col-12 col-sm-6 text-right"
-                  >₹<%= taxValue.toFixed(2) %></span
-                >
+                <span class="col-12 col-sm-6 text-right">₹<%= taxValue.toFixed(2) %></span>
               </div>
+
               <div class="row border-bottom pb-2 pt-2">
-                <span class="col-12 col-sm-6 cart__subtotal-title"
-                  >Delivery Charge</span
-                >
-                <span class="col-12 col-sm-6 text-right"
-                  >₹<%= deliveryCharge.toFixed(2) %></span
-                >
+                <span class="col-12 col-sm-6 cart__subtotal-title">Delivery Charge</span>
+                <span class="col-12 col-sm-6 text-right">₹<%= deliveryCharge.toFixed(2) %></span>
               </div>
+
               <div class="row border-bottom pb-2 pt-2">
-                <span class="col-12 col-sm-6 cart__subtotal-title"
-                  >Shipping</span
-                >
+                <span class="col-12 col-sm-6 cart__subtotal-title">Shipping</span>
                 <span class="col-12 col-sm-6 text-right">Free shipping</span>
               </div>
+
               <div id="grandTotalDiv" class="row border-bottom pb-2 pt-2">
-                <span class="col-12 col-sm-6 cart__subtotal-title"
-                  ><strong>Grand Total</strong></span
-                >
-                <span
-                  id="grandTotal"
-                  class="col-12 col-sm-6 cart__subtotal-title cart__subtotal text-right"
-                  ><span class="money"
-                    >₹<%= grandTotal.toFixed(2) %></span
-                  ></span
-                >
+                <span class="col-12 col-sm-6 cart__subtotal-title"><strong>Grand Total</strong></span>
+                <span id="grandTotal" class="col-12 col-sm-6 cart__subtotal-title cart__subtotal text-right">
+                  <span class="money">₹<%= grandTotal.toFixed(2) %></span>
+                </span>
               </div>
+
               <br />
+
               <input
                 style="background-color: cadetblue"
                 name="checkot"
@@ -231,217 +278,195 @@
                 value="Proceed To Checkout"
                 disabled="disabled"
               />
+
             </div>
+
           </div>
+
         </div>
+
       </div>
+
       <%}else{%>
+
       <h1>CART IS EMPTY</h1>
       <p>
-        <a
-          href="/"
-          class="btn btn--has-icon-after"
-          style="background-color: black; color: aliceblue"
-          >Continue shopping <i class="fa fa-caret-right" aria-hidden="true"></i
-        ></a>
+        <a href="/" class="btn btn--has-icon-after" style="background-color: black; color: aliceblue">
+          Continue shopping <i class="fa fa-caret-right" aria-hidden="true"></i>
+        </a>
       </p>
 
       <%}%>
+
     </div>
+
   </div>
+
 </div>
 
 
 <script>
+
+  // ── Button state helper ────────────────────────────────────────────────────
+  function updateBtnStates(productId, currentQty, stockValue) {
+    const plusBtn  = document.querySelector(`.qtyBtn.plus[data-product-id="${productId}"]`);
+    const minusBtn = document.querySelector(`.qtyBtn.minus[data-product-id="${productId}"]`);
+    if (plusBtn) {
+      const atMax = currentQty >= stockValue;
+      plusBtn.style.pointerEvents = atMax ? "none" : "auto";
+      plusBtn.style.opacity       = atMax ? "0.4"  : "1";
+    }
+    if (minusBtn) {
+      const atMin = currentQty <= 1;
+      minusBtn.style.pointerEvents = atMin ? "none" : "auto";
+      minusBtn.style.opacity       = atMin ? "0.4"  : "1";
+    }
+  }
+
+  // ── On page load: clamp values and set button states ──────────────────────
+  document.addEventListener("DOMContentLoaded", function () {
+
+    document.querySelectorAll(".qty").forEach((input) => {
+      const productId = input.dataset.productId;
+      const stock     = parseInt(input.dataset.stock);
+      let   val       = parseInt(input.value);
+
+      if (isNaN(val) || val < 1) { input.value = 1;     val = 1;     }
+      if (val > stock)           { input.value = stock;  val = stock;  }
+
+      updateBtnStates(productId, val, stock);
+    });
+
+    // ── Remove from cart ──────────────────────────────────────────────────
+    document.querySelectorAll(".cart__remove").forEach((button) => {
+      button.addEventListener("click", function (event) {
+        event.preventDefault();
+        const productId = button.dataset.productId;
+        fetch(`/cart/remove/${productId}`, { method: "GET" })
+          .then((response) => {
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            window.location.reload();
+          })
+          .catch(() => {});
+      });
+    });
+
+  });
+
+  // ── Checkout ───────────────────────────────────────────────────────────────
   const checkoutButton = document.getElementById("cartCheckout");
+
   function goToNextPage() {
     checkoutButton.disabled = false;
     checkoutButton.addEventListener("click", async function (event) {
       event.preventDefault();
-
       const productStockInfo = await checkProductStock();
-
-      const productsWithStockLessThanOne = productStockInfo.filter(
-        (product) => product.stock < 1
-      );
-
-      if (productsWithStockLessThanOne.length > 0) {
-        // Display messages for products with stock less than 1
-        productsWithStockLessThanOne.forEach((product) => {
-          const alertDiv = document.querySelector(
-            `#alertDiv[data-product-id="${product.productId}"]`
-          );
-          alertDiv.innerHTML =
-            '<p style="color: red;">Product stock is less than 1. Please remove it from your cart before checkout.</p>';
+      const outOfStock = productStockInfo.filter((p) => p.stock < 1);
+      if (outOfStock.length > 0) {
+        outOfStock.forEach((product) => {
+          const alertDiv = document.querySelector(`#alertDiv[data-product-id="${product.productId}"]`);
+          if (alertDiv) alertDiv.innerHTML = '<p style="color: red;">Product stock is less than 1. Please remove it from your cart before checkout.</p>';
         });
       } else {
-        // If no product has stock less than 1, proceed to checkout
-
         window.location.href = "/checkout";
       }
     });
   }
 
   async function checkProductStock() {
-    const productStocks = document.querySelectorAll("[data-product-stock]");
+    const productStocks = document.querySelectorAll(".stockElement");
     const productStockInfo = [];
-    productStocks.forEach((stockElement) => {
-      const productId = stockElement.dataset.productId;
-      const stock = parseInt(stockElement.dataset.productStock);
-      productStockInfo.push({ productId, stock });
+    productStocks.forEach((el) => {
+      productStockInfo.push({
+        productId: el.dataset.productId,
+        stock: parseInt(el.dataset.productStock),
+      });
     });
     return productStockInfo;
   }
 
   goToNextPage();
-</script>
 
-<!-- remove product from cart -->
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const removeButtons = document.querySelectorAll(".cart__remove");
-    removeButtons.forEach((button) => {
-      button.addEventListener("click", function (event) {
-        event.preventDefault();
-        const productId = button.dataset.productId;
-        fetch(`/cart/remove/${productId}`, {
-          method: "GET",
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            window.location.reload();
-          })
-          .catch((error) => {});
-      });
-    });
-  });
-</script>
-
-<script>
+  // ── Quantity update ────────────────────────────────────────────────────────
   const qty = (action, productId) => {
-    const qtyInput = document.querySelector(
-      `.qty[data-product-id="${productId}"]`
-    );
-
-    const stockElement = document.getElementById("stockElement");
-    const stockValue = stockElement.getAttribute("data-product-stock");
-
-    const alertDiv = document.querySelector(
-      `#alertDiv[data-product-id="${productId}"]`
-    );
-    const alertDiv2 = document.querySelector(
-      `#alertDiv2[data-product-id="${productId}"]`
-    );
-
-    const totalPriceElement = document.querySelector(
-      `#productPrice[data-product-id="${productId}"]`
-    );
-    const valueAttributePrice = parseInt(
-      totalPriceElement.getAttribute("value")
-    );
-
-    const subTotalElement = document.querySelector("#subTotalDiv");
+    const qtyInput          = document.querySelector(`.qty[data-product-id="${productId}"]`);
+    const stockElement      = document.querySelector(`.stockElement[data-product-id="${productId}"]`);
+    const stockValue        = parseInt(stockElement.getAttribute("data-product-stock"));
+    const alertDiv          = document.querySelector(`#alertDiv[data-product-id="${productId}"]`);
+    const alertDiv2         = document.querySelector(`#alertDiv2[data-product-id="${productId}"]`);
+    const totalPriceElement = document.querySelector(`#productPrice[data-product-id="${productId}"]`);
+    const subTotalElement   = document.querySelector("#subTotalDiv");
     const grandTotalElement = document.querySelector("#grandTotalDiv");
 
-    const qtyValue = parseInt(qtyInput.value);
+    // Read and clamp — do NOT write back here, just use the clamped value
+    let rawVal = parseInt(qtyInput.value);
+    if (isNaN(rawVal) || rawVal < 1) rawVal = 1;
+    if (rawVal > stockValue)         rawVal = stockValue;
+    const qtyValue = rawVal;
+
     let newQty;
 
     if (action === "plus") {
+      if (qtyValue >= stockValue) {
+        updateBtnStates(productId, qtyValue, stockValue);
+        return; // already at max, no fetch
+      }
       newQty = qtyValue + 1;
     } else {
-      newQty = Math.max(1, qtyValue - 1);
+      if (qtyValue <= 1) {
+        updateBtnStates(productId, qtyValue, stockValue);
+        return; // already at min, no fetch
+      }
+      newQty = qtyValue - 1;
     }
 
     fetch("/updateQuantity", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        productId: productId,
-        newQuantity: newQty,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productId, newQuantity: newQty }),
     })
       .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          // Check if the response indicates a product not found error
-          return response.json().then((data) => {
-            // if (response.status === 404 && data.message === 'Product not found') {
-              console.log(data);
-              console.log('hello');
-              console.log(response.status);
-              if(response.status===409){
-                console.log('its happend');
-                console.log(qtyValue);
-                console.log(stockValue);
-
-                console.log('yessss');
-                let value = document.querySelector(
-      `.qty[data-product-id="${productId}"]`
-    );
-value.value = stockValue
-
-                
-              }
-
-
-            if (response.status === 409 && data.message === "The requested quantity exceeds the available stock quantity.") {
-              throw new Error(data.message);
-            } else {
-              // Handle other errors
-              throw new Error("Network response was not ok");
-            }
-          });
-        }
+        if (response.ok) return response.json();
+        return response.json().then((data) => {
+          if (response.status === 409) {
+            qtyInput.value = stockValue;
+            updateBtnStates(productId, stockValue, stockValue);
+            throw new Error(data.message || "Stock limit reached");
+          }
+          throw new Error("Network response was not ok");
+        });
       })
       .then((data) => {
-        // Handle successful response data
-        const divseted = '<p style="color: darkred;">Out of stock</p>';
-        const divseted2 = '<p style="color: darkred;">max InStock Price</p>';
-        const hello = `<span class="money">₹${data.finalPrice}</span>`;
 
-        const subTotal = data.subTotal;
         subTotalElement.innerHTML = `
-        <span class="col-12 col-sm-6 cart__subtotal-title">Subtotal</span>
-        <span id="subTotal"  class="col-12 col-sm-6 text-right"><span class="money">₹${subTotal}</span></span>
-    `;
-
-        const grandTotal = data.grandTotal;
+          <span class="col-12 col-sm-6 cart__subtotal-title">Subtotal</span>
+          <span id="subTotal" class="col-12 col-sm-6 text-right"><span class="money">₹${data.subTotal}</span></span>
+        `;
         grandTotalElement.innerHTML = `
-        <span class="col-12 col-sm-6 cart__subtotal-title"><strong>Grand Total</strong></span>
-        <span id="grandTotal" class="col-12 col-sm-6 cart__subtotal-title cart__subtotal text-right"><span class="money">₹${grandTotal.toFixed(
-          2
-        )}</span></span>
-    `;
+          <span class="col-12 col-sm-6 cart__subtotal-title"><strong>Grand Total</strong></span>
+          <span id="grandTotal" class="col-12 col-sm-6 cart__subtotal-title cart__subtotal text-right"><span class="money">₹${data.grandTotal.toFixed(2)}</span></span>
+        `;
 
         if (data.outOfStock) {
-          alertDiv.innerHTML = divseted;
-          alertDiv2.innerHTML = divseted2;
-          totalPriceElement.innerHTML = hello;
+          alertDiv.innerHTML  = '<p style="color: darkred;">Out of stock</p>';
+          alertDiv2.innerHTML = '<p style="color: darkred;">max InStock Price</p>';
         } else {
-          alertDiv.innerHTML = "";
+          alertDiv.innerHTML  = "";
           alertDiv2.innerHTML = "";
-          totalPriceElement.innerHTML = hello;
         }
 
-        // Additional logic if needed when quantity is updated successfully
+        totalPriceElement.innerHTML = `<span class="money">₹${data.finalPrice}</span>`;
+
+        // ✅ Update input and buttons ONLY after server confirms — single source of truth
+        qtyInput.value = newQty;
+        updateBtnStates(productId, newQty, stockValue);
       })
-      .catch((error) => {
-        // Handle product not found error
-        
-
-        let value = document.querySelector(
-      `.qty[data-product-id="${productId}"]`
-    );
-    value.value = stockValue
-
-       
+      .catch(() => {
+        qtyInput.value = stockValue;
+        updateBtnStates(productId, stockValue, stockValue);
       });
   };
+
 </script>
+
 <%-include('footer')-%>
