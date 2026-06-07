@@ -901,6 +901,300 @@ const priceSortDescending = async (req, res) => {
 
 
 
+
+
+
+// const priceSortDescending2 = async (req, res) => {
+//   const { value, searchTerm } = req.body.value;
+//   const regex = /₹(\d+)\s*-\s*₹(\d+)/;
+//   const match = value.match(regex);
+//   const minValue = parseInt(match[1], 10);
+//   const maxValue = parseInt(match[2], 10);
+//   const categoryData = req.params.id.toUpperCase();
+//   const page = parseInt(req.query.page) || 1;
+//   const limit = 4;
+//   const offset = (page - 1) * limit;
+
+//   try {
+//     const category = await CategoryDB.findOne({
+//       name: categoryData,
+//       isAvailable: true,
+//     });
+//     if (!category) throw new Error("Category not found");
+
+//     // Change exact match to case-insensitive partial match regex
+//     const searchQuery = {
+//       categoryId: category._id,
+//       price: { $gte: minValue, $lte: maxValue },
+//       isAvailable: true,
+//       ...(searchTerm && { name: { $regex: searchTerm, $options: "i" } }),
+//     };
+
+//     const products = await productDB
+//       .find(searchQuery)
+//       .sort({ price: -1 })
+//       .skip(offset)
+//       .limit(limit)
+//       .populate("categoryId");
+
+//     const currentDate = new Date();
+//     const productsWithOffer = await Promise.all(
+//       products.map((p) => computeOfferPrice(p.toObject(), currentDate))
+//     );
+
+//     const totalCount = await productDB.countDocuments(searchQuery);
+//     const totalPages = Math.ceil(totalCount / limit);
+
+//     res.json({
+//       sortedProducts: productsWithOffer,
+//       totalPages,
+//       currentPage: page,
+//       categoryData,
+//       minValue,
+//       maxValue,
+//       searchTerm,
+//       descending: -1,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
+
+// const priceSortDescending2 = async (req, res) => {
+//   const { value, searchTerm } = req.body.value;
+//   const regex = /₹(\d+)\s*-\s*₹(\d+)/;
+//   const match = value.match(regex);
+//   const minValue = parseInt(match[1], 10);
+//   const maxValue = parseInt(match[2], 10);
+//   const categoryData = req.params.id.toUpperCase();
+//   const page = parseInt(req.query.page) || 1;
+//   const limit = 4;
+//   const offset = (page - 1) * limit;
+
+//   try {
+//     const category = await CategoryDB.findOne({
+//       name: categoryData,
+//       isAvailable: true,
+//     });
+//     if (!category) throw new Error("Category not found");
+
+//     const searchQuery = {
+//       categoryId: category._id,
+//       price: { $gte: minValue, $lte: maxValue },
+//       isAvailable: true,
+//       ...(searchTerm && { name: { $regex: searchTerm, $options: "i" } }),
+//     };
+
+//     const products = await productDB
+//       .find(searchQuery)
+//       .sort({ price: -1 }) // Sorts by original price
+//       .skip(offset)
+//       .limit(limit)
+//       .populate("categoryId");
+
+//     const currentDate = new Date();
+    
+//     // Compute offerPrice dynamically matching productListUser logic
+//     const productsWithOffer = await Promise.all(
+//       products.map(async (product) => {
+//         const categoryDiscount = product.categoryId.discountPercentage || 0;
+//         let offerPrice = product.price;
+//         let applyCategoryDiscount = true;
+
+//         if (
+//           product.discountPercentage &&
+//           (!product.expiryDate || currentDate <= product.expiryDate)
+//         ) {
+//           offerPrice -= (offerPrice * product.discountPercentage) / 100;
+//           applyCategoryDiscount = false;
+//         }
+
+//         if (applyCategoryDiscount) {
+//           if (product.categoryId.startDate && product.categoryId.endDate) {
+//             const startDate = new Date(product.categoryId.startDate);
+//             const endDate = new Date(product.categoryId.endDate);
+//             if (currentDate >= startDate && currentDate <= endDate) {
+//               offerPrice -= (offerPrice * categoryDiscount) / 100;
+//             }
+//           } else {
+//             offerPrice -= (offerPrice * categoryDiscount) / 100;
+//           }
+//         }
+
+//         return {
+//           ...product.toObject(),
+//           offerPrice,
+//           normalPrice: product.price,
+//         };
+//       })
+//     );
+
+//     const totalCount = await productDB.countDocuments(searchQuery);
+//     const totalPages = Math.ceil(totalCount / limit);
+
+//     res.json({
+//       sortedProducts: productsWithOffer,
+//       totalPages,
+//       currentPage: page,
+//       categoryData,
+//       minValue,
+//       maxValue,
+//       searchTerm,
+//       descending: -1,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
+
+// const priceSortAscending2 = async (req, res) => {
+//   const { value, searchTerm } = req.body.value;
+//   const regex = /₹(\d+)\s*-\s*₹(\d+)/;
+//   const match = value.match(regex);
+//   const minValue = parseInt(match[1], 10);
+//   const maxValue = parseInt(match[2], 10);
+//   const categoryData = req.params.id.toUpperCase();
+//   const page = parseInt(req.query.page) || 1;
+//   const limit = 4;
+//   const offset = (page - 1) * limit;
+
+//   try {
+//     const category = await CategoryDB.findOne({
+//       name: categoryData,
+//       isAvailable: true,
+//     });
+//     if (!category) throw new Error("Category not found");
+
+//     // Change exact match to case-insensitive partial match regex
+//     const searchQuery = {
+//       categoryId: category._id,
+//       price: { $gte: minValue, $lte: maxValue },
+//       isAvailable: true,
+//       ...(searchTerm && { name: { $regex: searchTerm, $options: "i" } }),
+//     };
+
+//     const products = await productDB
+//       .find(searchQuery)
+//       .sort({ price: 1 })
+//       .skip(offset)
+//       .limit(limit)
+//       .populate("categoryId");
+
+//     const currentDate = new Date();
+//     const productsWithOffer = await Promise.all(
+//       products.map((p) => computeOfferPrice(p.toObject(), currentDate))
+//     );
+
+//     const totalCount = await productDB.countDocuments(searchQuery);
+//     const totalPages = Math.ceil(totalCount / limit);
+
+//     res.json({
+//       sortedProducts: productsWithOffer,
+//       totalPages,
+//       currentPage: page,
+//       categoryData,
+//       minValue,
+//       maxValue,
+//       searchTerm,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
+
+// const priceSortAscending2 = async (req, res) => {
+//   const { value, searchTerm } = req.body.value;
+//   const regex = /₹(\d+)\s*-\s*₹(\d+)/;
+//   const match = value.match(regex);
+//   const minValue = parseInt(match[1], 10);
+//   const maxValue = parseInt(match[2], 10);
+//   const categoryData = req.params.id.toUpperCase();
+//   const page = parseInt(req.query.page) || 1;
+//   const limit = 4;
+//   const offset = (page - 1) * limit;
+
+//   try {
+//     const category = await CategoryDB.findOne({
+//       name: categoryData,
+//       isAvailable: true,
+//     });
+//     if (!category) throw new Error("Category not found");
+
+//     const searchQuery = {
+//       categoryId: category._id,
+//       price: { $gte: minValue, $lte: maxValue },
+//       isAvailable: true,
+//       ...(searchTerm && { name: { $regex: searchTerm, $options: "i" } }),
+//     };
+
+//     const products = await productDB
+//       .find(searchQuery)
+//       .sort({ price: 1 }) // Sorts by original price
+//       .skip(offset)
+//       .limit(limit)
+//       .populate("categoryId");
+
+//     const currentDate = new Date();
+
+//     // Compute offerPrice dynamically matching productListUser logic
+//     const productsWithOffer = await Promise.all(
+//       products.map(async (product) => {
+//         const categoryDiscount = product.categoryId.discountPercentage || 0;
+//         let offerPrice = product.price;
+//         let applyCategoryDiscount = true;
+
+//         if (
+//           product.discountPercentage &&
+//           (!product.expiryDate || currentDate <= product.expiryDate)
+//         ) {
+//           offerPrice -= (offerPrice * product.discountPercentage) / 100;
+//           applyCategoryDiscount = false;
+//         }
+
+//         if (applyCategoryDiscount) {
+//           if (product.categoryId.startDate && product.categoryId.endDate) {
+//             const startDate = new Date(product.categoryId.startDate);
+//             const endDate = new Date(product.categoryId.endDate);
+//             if (currentDate >= startDate && currentDate <= endDate) {
+//               offerPrice -= (offerPrice * categoryDiscount) / 100;
+//             }
+//           } else {
+//             offerPrice -= (offerPrice * categoryDiscount) / 100;
+//           }
+//         }
+
+//         return {
+//           ...product.toObject(),
+//           offerPrice,
+//           normalPrice: product.price,
+//         };
+//       })
+//     );
+
+//     const totalCount = await productDB.countDocuments(searchQuery);
+//     const totalPages = Math.ceil(totalCount / limit);
+
+//     res.json({
+//       sortedProducts: productsWithOffer,
+//       totalPages,
+//       currentPage: page,
+//       categoryData,
+//       minValue,
+//       maxValue,
+//       searchTerm,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
+
+
+
+
 const priceSortDescending2 = async (req, res) => {
   const { value, searchTerm } = req.body.value;
   const regex = /₹(\d+)\s*-\s*₹(\d+)/;
@@ -910,40 +1204,60 @@ const priceSortDescending2 = async (req, res) => {
   const categoryData = req.params.id.toUpperCase();
   const page = parseInt(req.query.page) || 1;
   const limit = 4;
-  const offset = (page - 1) * limit;
 
   try {
-    const category = await CategoryDB.findOne({
-      name: categoryData,
-      isAvailable: true,
-    });
+    const category = await CategoryDB.findOne({ name: categoryData, isAvailable: true });
     if (!category) throw new Error("Category not found");
 
-    // Change exact match to case-insensitive partial match regex
+    // Fetch ALL matching products (no price filter yet, no skip/limit)
     const searchQuery = {
       categoryId: category._id,
-      price: { $gte: minValue, $lte: maxValue },
       isAvailable: true,
       ...(searchTerm && { name: { $regex: searchTerm, $options: "i" } }),
     };
 
-    const products = await productDB
-      .find(searchQuery)
-      .sort({ price: -1 })
-      .skip(offset)
-      .limit(limit)
-      .populate("categoryId");
+    const products = await productDB.find(searchQuery).populate("categoryId");
 
     const currentDate = new Date();
-    const productsWithOffer = await Promise.all(
-      products.map((p) => computeOfferPrice(p.toObject(), currentDate))
-    );
 
-    const totalCount = await productDB.countDocuments(searchQuery);
+    // Compute offerPrice for all products
+    const productsWithOffer = products.map((product) => {
+      const categoryDiscount = product.categoryId.discountPercentage || 0;
+      let offerPrice = product.price;
+      let applyCategoryDiscount = true;
+
+      if (product.discountPercentage && (!product.expiryDate || currentDate <= product.expiryDate)) {
+        offerPrice -= (offerPrice * product.discountPercentage) / 100;
+        applyCategoryDiscount = false;
+      }
+
+      if (applyCategoryDiscount) {
+        if (product.categoryId.startDate && product.categoryId.endDate) {
+          const startDate = new Date(product.categoryId.startDate);
+          const endDate = new Date(product.categoryId.endDate);
+          if (currentDate >= startDate && currentDate <= endDate) {
+            offerPrice -= (offerPrice * categoryDiscount) / 100;
+          }
+        } else {
+          offerPrice -= (offerPrice * categoryDiscount) / 100;
+        }
+      }
+
+      return { ...product.toObject(), offerPrice, normalPrice: product.price };
+    });
+
+    // Filter by offerPrice range, sort by offerPrice, then paginate
+    const filtered = productsWithOffer
+      .filter((p) => p.offerPrice >= minValue && p.offerPrice <= maxValue)
+      .sort((a, b) => b.offerPrice - a.offerPrice); // descending
+
+    const totalCount = filtered.length;
     const totalPages = Math.ceil(totalCount / limit);
+    const offset = (page - 1) * limit;
+    const paginated = filtered.slice(offset, offset + limit);
 
     res.json({
-      sortedProducts: productsWithOffer,
+      sortedProducts: paginated,
       totalPages,
       currentPage: page,
       categoryData,
@@ -957,6 +1271,7 @@ const priceSortDescending2 = async (req, res) => {
   }
 };
 
+
 const priceSortAscending2 = async (req, res) => {
   const { value, searchTerm } = req.body.value;
   const regex = /₹(\d+)\s*-\s*₹(\d+)/;
@@ -966,40 +1281,58 @@ const priceSortAscending2 = async (req, res) => {
   const categoryData = req.params.id.toUpperCase();
   const page = parseInt(req.query.page) || 1;
   const limit = 4;
-  const offset = (page - 1) * limit;
 
   try {
-    const category = await CategoryDB.findOne({
-      name: categoryData,
-      isAvailable: true,
-    });
+    const category = await CategoryDB.findOne({ name: categoryData, isAvailable: true });
     if (!category) throw new Error("Category not found");
 
-    // Change exact match to case-insensitive partial match regex
     const searchQuery = {
       categoryId: category._id,
-      price: { $gte: minValue, $lte: maxValue },
       isAvailable: true,
       ...(searchTerm && { name: { $regex: searchTerm, $options: "i" } }),
     };
 
-    const products = await productDB
-      .find(searchQuery)
-      .sort({ price: 1 })
-      .skip(offset)
-      .limit(limit)
-      .populate("categoryId");
+    const products = await productDB.find(searchQuery).populate("categoryId");
 
     const currentDate = new Date();
-    const productsWithOffer = await Promise.all(
-      products.map((p) => computeOfferPrice(p.toObject(), currentDate))
-    );
 
-    const totalCount = await productDB.countDocuments(searchQuery);
+    const productsWithOffer = products.map((product) => {
+      const categoryDiscount = product.categoryId.discountPercentage || 0;
+      let offerPrice = product.price;
+      let applyCategoryDiscount = true;
+
+      if (product.discountPercentage && (!product.expiryDate || currentDate <= product.expiryDate)) {
+        offerPrice -= (offerPrice * product.discountPercentage) / 100;
+        applyCategoryDiscount = false;
+      }
+
+      if (applyCategoryDiscount) {
+        if (product.categoryId.startDate && product.categoryId.endDate) {
+          const startDate = new Date(product.categoryId.startDate);
+          const endDate = new Date(product.categoryId.endDate);
+          if (currentDate >= startDate && currentDate <= endDate) {
+            offerPrice -= (offerPrice * categoryDiscount) / 100;
+          }
+        } else {
+          offerPrice -= (offerPrice * categoryDiscount) / 100;
+        }
+      }
+
+      return { ...product.toObject(), offerPrice, normalPrice: product.price };
+    });
+
+    // Filter by offerPrice range, sort by offerPrice, then paginate
+    const filtered = productsWithOffer
+      .filter((p) => p.offerPrice >= minValue && p.offerPrice <= maxValue)
+      .sort((a, b) => a.offerPrice - b.offerPrice); // ascending
+
+    const totalCount = filtered.length;
     const totalPages = Math.ceil(totalCount / limit);
+    const offset = (page - 1) * limit;
+    const paginated = filtered.slice(offset, offset + limit);
 
     res.json({
-      sortedProducts: productsWithOffer,
+      sortedProducts: paginated,
       totalPages,
       currentPage: page,
       categoryData,
@@ -1012,6 +1345,67 @@ const priceSortAscending2 = async (req, res) => {
   }
 };
 
+
+// const searchProduct = async (req, res) => {
+//   const categoryData = req.params.id.toUpperCase();
+//   const searchValue = req.body.searchTerm;
+//   const priceString = req.body.value;
+//   const regex = /₹(\d+)\s*-\s*₹(\d+)/;
+//   const match = priceString.match(regex);
+//   const minValue = parseInt(match[1], 10);
+//   const maxValue = parseInt(match[2], 10);
+//   const page = parseInt(req.query.page) || 1;
+//   const limit = 4;
+//   const offset = (page - 1) * limit;
+
+//   try {
+//     const category = await CategoryDB.findOne({
+//       name: categoryData,
+//       isAvailable: true,
+//     });
+//     if (!category) throw new Error("Category not found");
+
+//     const products = await productDB
+//       .find({
+//         categoryId: category._id,
+//         price: { $gte: minValue, $lte: maxValue },
+//         isAvailable: true,
+//         name: { $regex: searchValue, $options: "i" },
+//       })
+//       .sort({ price: 1 })
+//       .skip(offset)
+//       .limit(limit)
+//       .populate("categoryId");
+
+//     const currentDate = new Date();
+//     const productsWithOffer = await Promise.all(
+//       products.map((p) => computeOfferPrice(p.toObject(), currentDate))
+//     );
+
+//     const totalCount = await productDB.countDocuments({
+//       categoryId: category._id,
+//       price: { $gte: minValue, $lte: maxValue },
+//       isAvailable: true,
+//       name: { $regex: searchValue, $options: "i" },
+//     });
+
+//     const totalPages = Math.ceil(totalCount / limit);
+
+//     res.json({
+//       searchProducts: productsWithOffer,
+//       totalPages,
+//       currentPage: page,
+//       categoryData,
+//       minValue,
+//       maxValue,
+//       searchTerm: searchValue,
+//     });
+//   } catch (err) {
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
+
 const searchProduct = async (req, res) => {
   const categoryData = req.params.id.toUpperCase();
   const searchValue = req.body.searchTerm;
@@ -1022,7 +1416,7 @@ const searchProduct = async (req, res) => {
   const maxValue = parseInt(match[2], 10);
   const page = parseInt(req.query.page) || 1;
   const limit = 4;
-  const offset = (page - 1) * limit;
+  const sortOrder = req.body.sortOrder || "asc"; // 'asc' or 'desc'
 
   try {
     const category = await CategoryDB.findOne({
@@ -1031,40 +1425,77 @@ const searchProduct = async (req, res) => {
     });
     if (!category) throw new Error("Category not found");
 
+    // Fetch all matching products without price filter, sort, or pagination
     const products = await productDB
       .find({
         categoryId: category._id,
-        price: { $gte: minValue, $lte: maxValue },
         isAvailable: true,
         name: { $regex: searchValue, $options: "i" },
       })
-      .sort({ price: 1 })
-      .skip(offset)
-      .limit(limit)
       .populate("categoryId");
 
     const currentDate = new Date();
-    const productsWithOffer = await Promise.all(
-      products.map((p) => computeOfferPrice(p.toObject(), currentDate))
-    );
 
-    const totalCount = await productDB.countDocuments({
-      categoryId: category._id,
-      price: { $gte: minValue, $lte: maxValue },
-      isAvailable: true,
-      name: { $regex: searchValue, $options: "i" },
+    // Compute offer price for every product
+    const productsWithOffer = products.map((product) => {
+      const categoryDiscount = product.categoryId.discountPercentage || 0;
+      let offerPrice = product.price;
+      let applyCategoryDiscount = true;
+
+      if (
+        product.discountPercentage &&
+        (!product.expiryDate || currentDate <= product.expiryDate)
+      ) {
+        offerPrice -= (offerPrice * product.discountPercentage) / 100;
+        applyCategoryDiscount = false;
+      }
+
+      if (applyCategoryDiscount) {
+        if (product.categoryId.startDate && product.categoryId.endDate) {
+          const startDate = new Date(product.categoryId.startDate);
+          const endDate = new Date(product.categoryId.endDate);
+          if (currentDate >= startDate && currentDate <= endDate) {
+            offerPrice -= (offerPrice * categoryDiscount) / 100;
+          }
+        } else {
+          offerPrice -= (offerPrice * categoryDiscount) / 100;
+        }
+      }
+
+      return {
+        ...product.toObject(),
+        offerPrice,
+        normalPrice: product.price,
+      };
     });
 
+    // Filter by offer price range
+    const filtered = productsWithOffer.filter(
+      (p) => p.offerPrice >= minValue && p.offerPrice <= maxValue
+    );
+
+    // Sort by offer price
+    filtered.sort((a, b) =>
+      sortOrder === "desc"
+        ? b.offerPrice - a.offerPrice
+        : a.offerPrice - b.offerPrice
+    );
+
+    // Paginate in memory
+    const totalCount = filtered.length;
     const totalPages = Math.ceil(totalCount / limit);
+    const offset = (page - 1) * limit;
+    const paginated = filtered.slice(offset, offset + limit);
 
     res.json({
-      searchProducts: productsWithOffer,
+      searchProducts: paginated,
       totalPages,
       currentPage: page,
       categoryData,
       minValue,
       maxValue,
       searchTerm: searchValue,
+      sortOrder,
     });
   } catch (err) {
     res.status(500).json({ error: "Internal Server Error" });

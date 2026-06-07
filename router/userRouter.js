@@ -48,11 +48,18 @@ router.post('/updateUserName',    userManagement.changeName)
 
 
 
+
+
 const productManagement=require('../controller/productManagement')
 
 
 router.get('/category/:id',   userSessionHandling.isBlockedNow,    productManagement.productListUser)
-router.post('/category/fetch/:id', userSessionHandling.isBlockedNow,    productManagement.fetchData)
+
+router.post('/category/fetch/:id', userSessionHandling.isBlockedNow, ((req,res,next)=>{
+    console.log(123456789);
+    next()
+}
+),   productManagement.fetchData)
 
 // router.post('/category/:id/ascending/',userSessionHandling.isBlockedNow,productManagement.priceSortDescending)
 // router.post('/category/:id/descending',userSessionHandling.isBlockedNow,productManagement.priceSortAscending)
