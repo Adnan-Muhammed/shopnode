@@ -955,7 +955,7 @@ res.redirect('/error')
 
 
 const forgotPassword = (req,res)=>{
-    res.render('user/forgot-password')
+        res.render('user/forgot-password')
 }
 
 

@@ -644,7 +644,7 @@
 				range: true,
 				min: 150,
 				max: 1800,
-				values: [150, 700],
+				values: [150, 1800],
 				slide: function(event, ui) {
 					// Update the input field dynamically during the slide event
 					$("#amount").val("₹" + ui.values[0] + " - ₹" + ui.values[1]);

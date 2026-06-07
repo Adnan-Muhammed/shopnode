@@ -899,6 +899,119 @@ const priceSortDescending = async (req, res) => {
   }
 };
 
+
+
+const priceSortDescending2 = async (req, res) => {
+  const { value, searchTerm } = req.body.value;
+  const regex = /₹(\d+)\s*-\s*₹(\d+)/;
+  const match = value.match(regex);
+  const minValue = parseInt(match[1], 10);
+  const maxValue = parseInt(match[2], 10);
+  const categoryData = req.params.id.toUpperCase();
+  const page = parseInt(req.query.page) || 1;
+  const limit = 4;
+  const offset = (page - 1) * limit;
+
+  try {
+    const category = await CategoryDB.findOne({
+      name: categoryData,
+      isAvailable: true,
+    });
+    if (!category) throw new Error("Category not found");
+
+    // Change exact match to case-insensitive partial match regex
+    const searchQuery = {
+      categoryId: category._id,
+      price: { $gte: minValue, $lte: maxValue },
+      isAvailable: true,
+      ...(searchTerm && { name: { $regex: searchTerm, $options: "i" } }),
+    };
+
+    const products = await productDB
+      .find(searchQuery)
+      .sort({ price: -1 })
+      .skip(offset)
+      .limit(limit)
+      .populate("categoryId");
+
+    const currentDate = new Date();
+    const productsWithOffer = await Promise.all(
+      products.map((p) => computeOfferPrice(p.toObject(), currentDate))
+    );
+
+    const totalCount = await productDB.countDocuments(searchQuery);
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      sortedProducts: productsWithOffer,
+      totalPages,
+      currentPage: page,
+      categoryData,
+      minValue,
+      maxValue,
+      searchTerm,
+      descending: -1,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+const priceSortAscending2 = async (req, res) => {
+  const { value, searchTerm } = req.body.value;
+  const regex = /₹(\d+)\s*-\s*₹(\d+)/;
+  const match = value.match(regex);
+  const minValue = parseInt(match[1], 10);
+  const maxValue = parseInt(match[2], 10);
+  const categoryData = req.params.id.toUpperCase();
+  const page = parseInt(req.query.page) || 1;
+  const limit = 4;
+  const offset = (page - 1) * limit;
+
+  try {
+    const category = await CategoryDB.findOne({
+      name: categoryData,
+      isAvailable: true,
+    });
+    if (!category) throw new Error("Category not found");
+
+    // Change exact match to case-insensitive partial match regex
+    const searchQuery = {
+      categoryId: category._id,
+      price: { $gte: minValue, $lte: maxValue },
+      isAvailable: true,
+      ...(searchTerm && { name: { $regex: searchTerm, $options: "i" } }),
+    };
+
+    const products = await productDB
+      .find(searchQuery)
+      .sort({ price: 1 })
+      .skip(offset)
+      .limit(limit)
+      .populate("categoryId");
+
+    const currentDate = new Date();
+    const productsWithOffer = await Promise.all(
+      products.map((p) => computeOfferPrice(p.toObject(), currentDate))
+    );
+
+    const totalCount = await productDB.countDocuments(searchQuery);
+    const totalPages = Math.ceil(totalCount / limit);
+
+    res.json({
+      sortedProducts: productsWithOffer,
+      totalPages,
+      currentPage: page,
+      categoryData,
+      minValue,
+      maxValue,
+      searchTerm,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 const searchProduct = async (req, res) => {
   const categoryData = req.params.id.toUpperCase();
   const searchValue = req.body.searchTerm;
@@ -974,4 +1087,7 @@ module.exports = {
   priceSortDescending,
   searchProduct,
   fetchData,
+  // new update
+  priceSortAscending2,
+  priceSortDescending2,
 };

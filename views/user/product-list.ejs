@@ -199,9 +199,6 @@
 
 
 <!-- price sorting script -->
-
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('search-value');
@@ -225,13 +222,13 @@
                 <div class="col-6 col-sm-6 col-md-4 col-lg-3 item">
                     <div class="product-image">
                         <a href="/productdetails/${product._id}">
-                            <img class="primary blur-up lazyload" data-src="${product.image[0]}" src="${product.image[0]}" alt="${product.name}" title="product" />
-                            <img class="hover blur-up lazyload" data-src="${product.image[1]}" src="${product.image[1]}" alt="${product.name}" title="product" />
+                            <img class="primary blur-up lazyload" data-src="${product.image[0]}" src="${product.image[0]}" alt="${product.name}" title="product" style="width:100%; height:280px; object-fit:cover;" />
+                            <img class="hover blur-up lazyload" data-src="${product.image[1]}" src="${product.image[1]}" alt="${product.name}" title="product" style="width:100%; height:280px; object-fit:cover;"/>
                         </a>
                     </div>
                     <div class="product-details text-center">
                         <div class="product-name">
-                            <a href="">${product.name}</a>
+                            <a href="/productdetails/${product._id}">${product.name}</a>
                         </div>
                         <div class="product-price">
                             ${priceHtml}
@@ -251,7 +248,7 @@
                         <ul class="pagination">
                             ${Array.from({ length: totalPages }, (_, i) => `
                                 <li class="btn-dark page-item ${i + 1 === currentPage ? 'active' : ''}" style="background-color: aliceblue;">
-                                    <a class="page-link2" style="margin: 2px;" 
+                                    <a class="page-link2" style="margin: 2px; cursor: pointer;" 
                                         data-category="${params.categoryData}" 
                                         data-page="${i + 1}" 
                                         data-min-value="${params.minValue}" 
@@ -281,11 +278,9 @@
         function attachPaginationListeners() {
             const paginationLinks = document.querySelectorAll('.page-link2');
             paginationLinks.forEach(link => {
-                // Remove any existing listeners to prevent duplicates
                 link.replaceWith(link.cloneNode(true));
             });
             
-            // Re-select after cloning
             document.querySelectorAll('.page-link2').forEach(link => {
                 link.addEventListener('click', async function(event) {
                     event.preventDefault();
@@ -367,18 +362,9 @@
             fetchData('/category/<%=categoryName%>/descending', { searchTerm, value });
         });
         
-        // Initial attachment of pagination listeners
         attachPaginationListeners();
     });
 </script>
-
-
-
-  
-
-
-
-<!-- search filter  by name-->
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -387,7 +373,7 @@
         const productListContainer = document.getElementById('orginalList');
         const paginationContainer = document.getElementById('orginalPagination');
         
-        // Helper function to render product with offer price logic
+        // STYLES FIXED: Exactly matches your main product card item structure
         function renderProduct(product) {
             let priceHtml = '';
             if (product.offerPrice && product.offerPrice < product.price) {
@@ -404,13 +390,13 @@
                 <div class="col-6 col-sm-6 col-md-4 col-lg-3 item">
                     <div class="product-image">
                         <a href="/productdetails/${product._id}">
-                            <img class="primary blur-up lazyload" data-src="${product.image[0]}" src="${product.image[0]}" alt="image" title="product" />
-                            <img class="hover blur-up lazyload" data-src="${product.image[1]}" src="${product.image[1]}" alt="image" title="product" />
+                            <img class="primary blur-up lazyload" data-src="${product.image[0]}" src="${product.image[0]}" alt="${product.name}" title="product" style="width:100%; height:280px; object-fit:cover;" />
+                            <img class="hover blur-up lazyload" data-src="${product.image[1]}" src="${product.image[1]}" alt="${product.name}" title="product" style="width:100%; height:280px; object-fit:cover;" />
                         </a>
                     </div>
                     <div class="product-details text-center">
                         <div class="product-name">
-                            <a href="">${product.name}</a>
+                            <a href="/productdetails/${product._id}">${product.name}</a>
                         </div>
                         <div class="product-price">
                             ${priceHtml}
@@ -420,7 +406,7 @@
             `;
         }
         
-        // Helper function to render pagination
+        // STYLES FIXED: Match hyphenated standard data-attributes structure
         function renderPagination(totalPages, currentPage, params) {
             if (totalPages <= 1) return '';
             
@@ -430,7 +416,7 @@
                         <ul class="pagination">
                             ${Array.from({ length: totalPages }, (_, i) => `
                                 <li class="btn-dark page-item ${i + 1 === currentPage ? 'active' : ''}" style="background-color: aliceblue;">
-                                    <a class="page-link2" style="margin: 2px;"
+                                    <a class="page-link2" style="margin: 2px; cursor: pointer;"
                                         data-category="${params.categoryData}" 
                                         data-page="${i + 1}" 
                                         data-min-value="${params.minValue}" 
@@ -445,34 +431,29 @@
                 </div>`;
         }
         
-        // Function to update product display
         function updateProductDisplay(products, totalPages, currentPage, params) {
             productListContainer.innerHTML = products.map(renderProduct).join('');
             paginationContainer.innerHTML = renderPagination(totalPages, currentPage, params);
-            
-            // Add event listeners to new pagination links
             attachPaginationListeners();
         }
         
-        // Function to attach pagination event listeners
         function attachPaginationListeners() {
             const paginationLinks = document.querySelectorAll('.page-link2');
             paginationLinks.forEach(link => {
-                // Remove any existing listeners to prevent duplicates
                 link.replaceWith(link.cloneNode(true));
             });
             
-            // Re-select after cloning
             document.querySelectorAll('.page-link2').forEach(link => {
                 link.addEventListener('click', async function(event) {
                     event.preventDefault();
                     
+                    // Datasets are safely captured here using standard lowercase notation
                     const params = {
                         categoryData: this.dataset.category,
                         page: this.dataset.page,
-                        minValue: this.dataset.minValue,
-                        maxValue: this.dataset.maxValue,
-                        searchTerm: this.dataset.searchTerm
+                        minValue: this.dataset.minValue || this.dataset.minvalue,
+                        maxValue: this.dataset.maxValue || this.dataset.maxvalue,
+                        searchTerm: this.dataset.searchTerm || this.dataset.searchterm
                     };
                     
                     try {
@@ -499,7 +480,6 @@
             });
         }
         
-        // Main fetch function for search
         const fetchData = async (url, value) => {
             try {
                 const response = await fetch(url, {
@@ -514,6 +494,7 @@
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
                 
+                // UNTOUCHED: Kept your controller data array target names exactly the same
                 const searchProducts = await response.json();
                 const searchProductsArray = searchProducts.searchProducts;
                 const { totalPages, currentPage, categoryData, minValue, maxValue, searchTerm } = searchProducts;
@@ -531,26 +512,21 @@
             }
         };
         
-        // Event listener for search button
-        searchButton.addEventListener('click', function() {                       
-            const searchTerm = searchInput.value.trim();                            
+        searchButton.addEventListener('click', function() {                      
+            const searchTerm = searchInput.value.trim();                                            
             const value = document.getElementById('amount').value.trim();
             fetchData('/category/<%=categoryName%>/searchProduct', { searchTerm, value });   
         });
         
-        // Initial attachment of pagination listeners
         attachPaginationListeners();
-        
     });
 </script>
-<!-- fetch  -->
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const productListContainer = document.getElementById('orginalList');
     const paginationContainer = document.getElementById('orginalPagination');
     
-    // Helper function to render product with offer price logic
     function renderProduct(product) {
         let priceHtml = '';
         if (product.offerPrice && product.offerPrice < product.price) {
@@ -567,13 +543,13 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="col-6 col-sm-6 col-md-4 col-lg-3 item">
                 <div class="product-image">
                     <a href="/productdetails/${product._id}">
-                        <img class="primary blur-up lazyload" src="${product.image[0]}" alt="${product.name}" title="product" />
-                        <img class="hover blur-up lazyload" src="${product.image[1]}" alt="${product.name}" title="product" />
+                        <img class="primary blur-up lazyload" src="${product.image[0]}" alt="${product.name}" title="product" style="width:100%; height:280px; object-fit:cover;" />
+                        <img class="hover blur-up lazyload" src="${product.image[1]}" alt="${product.name}" title="product" style="width:100%; height:280px; object-fit:cover;" />
                     </a>
                 </div>
                 <div class="product-details text-center">
                     <div class="product-name">
-                        <a href="">${product.name}</a>
+                        <a href="/productdetails/${product._id}">${product.name}</a>
                     </div>
                     <div class="product-price">
                         ${priceHtml}
@@ -583,7 +559,6 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
     
-    // Helper function to render pagination
     function renderPagination(totalPages, currentPage, params) {
         if (totalPages <= 1) return '';
         
@@ -593,12 +568,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <ul class="pagination">
                         ${Array.from({ length: totalPages }, (_, i) => `
                             <li class="btn-dark page-item ${i + 1 === currentPage ? 'active' : ''}" style="background-color: aliceblue;">
-                                <a class="page-link2" style="margin: 2px;" 
+                                <a class="page-link2" style="margin: 2px; cursor: pointer;" 
                                     data-category="${params.categoryData}" 
                                     data-page="${i + 1}" 
-                                    data-minValue="${params.minValue}" 
-                                    data-maxValue="${params.maxValue}" 
-                                    data-searchTerm="${params.searchTerm}">
+                                    data-min-value="${params.minValue}" 
+                                    data-max-value="${params.maxValue}" 
+                                    data-search-term="${params.searchTerm}">
                                     <p style="font-size: 15px; color: black;">${i + 1}</p>
                                 </a>
                             </li>
@@ -609,24 +584,18 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
     
-    // Function to update product display
     function updateProductDisplay(products, totalPages, currentPage, params) {
         productListContainer.innerHTML = products.map(renderProduct).join('');
         paginationContainer.innerHTML = renderPagination(totalPages, currentPage, params);
-        
-        // Add event listeners to new pagination links
         attachPaginationListeners();
     }
     
-    // Function to attach pagination event listeners
     function attachPaginationListeners() {
         const paginationLinks = document.querySelectorAll('.page-link2');
         paginationLinks.forEach(link => {
-            // Remove any existing listeners to prevent duplicates
             link.replaceWith(link.cloneNode(true));
         });
         
-        // Re-select after cloning
         document.querySelectorAll('.page-link2').forEach(link => {
             link.addEventListener('click', async function(event) {
                 event.preventDefault();
@@ -663,7 +632,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Initial attachment of pagination listeners
     attachPaginationListeners();
 });
 </script>
@@ -671,5 +639,3 @@ document.addEventListener('DOMContentLoaded', function() {
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 <%-include('footer')-%>
-    </body>
-    </html>
