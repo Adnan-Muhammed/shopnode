@@ -690,42 +690,139 @@ const otpVerificationPost = async (req, res) => {
 };
 
 
+// const otpVerificationPost = async (req, res) => {
+//     try {
+//         const { otp } = req.body;
+
+//         // Check OTP expiry
+//         if (Date.now() > req.session.otpExpiry) {
+//             return res.status(400).json({ message: 'OTP has expired. Please try again.' });
+//         }
+
+//         // Check OTP match
+//         if (otp !== req.session.otp) {
+//             return res.status(400).json({ message: 'Invalid OTP.' });
+//         }
+
+//         // ✅ Only NOW update the password in DB
+//         const user = await userDB.findOne({ email: req.session.email });
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found.' });
+//         }
+
+//         user.password = req.session.pendingPassword;
+//         await user.save();
+
+//         // Clean up session
+//         delete req.session.otp;
+//         delete req.session.otpExpiry;
+//         delete req.session.pendingPassword;
+//         delete req.session.email;
+
+//         return res.redirect('/login'); // or wherever after success
+
+//     } catch (error) {
+//         res.redirect('/error');
+//     }
+// };
 
 
 
 
+
+
+
+// const updatePasswordPost = async (req, res) => {
+//     try {
+
+
+
+//         const { email, password } = req.body;
+//         req.session.email=email
+//         // Find the user by email
+//         const user = await userDB.findOne({ email });
+//         if (!user) {
+//             return res.status(404).json({ message: 'User not found.' });
+//         }
+//         if (req.session.user && req.session.user.email !== user.email) {
+//             return res.status(404).json({ message: 'your email is not correct' });
+//         }
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         // Generate OTP
+//         const otp = otpGenerator.generate(6, {
+//             upperCaseAlphabets: false,
+//             lowerCaseAlphabets: false,
+//             specialChars: false,
+//         });
+       
+//         // Save the OTP in the user document
+//         user.password = hashedPassword
+//         user.otp = otp;
+//         await user.save();
+
+
+
+//         // Send OTP to the user via email
+//         const transporter = nodemailer.createTransport({
+//             service: 'gmail',
+//             auth: {
+//                 user: 'adnan.shajahan786@gmail.com',
+//                 pass: 'tgua inbn eelw qljg'
+//             }
+//         });
+//         const mailOptions = {
+//             from: 'adnan.shajahan@gmail.com',
+//             to: email,
+//             subject: 'Password Reset OTP',
+//             text: `Your OTP for password reset is ${otp}. Please don't share it.`,
+//         };
+
+//         await transporter.sendMail(mailOptions);
+      
+
+//         if(req.session.userNew){
+//             req.session.updatePassword = true
+//             return res.redirect('/otpPage');
+//         }
+       
+
+//                 res.redirect('/otpPage'); // Redirect to the OTP verification page
+//     } catch (error) {
+//         // return res.status(500).json({ message: 'Internal server error.' });
+//         res.redirect('/error')
+//     }
+// };
 
 const updatePasswordPost = async (req, res) => {
     try {
-
-
-
         const { email, password } = req.body;
-        req.session.email=email
+
         // Find the user by email
         const user = await userDB.findOne({ email });
         if (!user) {
             return res.status(404).json({ message: 'User not found.' });
         }
-        if (req.session.user && req.session.user.email !== user.email) {
-            return res.status(404).json({ message: 'your email is not correct' });
+
+        // If a user is logged in, ensure the email matches their account
+        if (req.session.user && req.session.user.email !== email) {
+            return res.status(403).json({ message: 'Email does not match your account.' });
         }
-        const hashedPassword = await bcrypt.hash(password, 10);
+
         // Generate OTP
         const otp = otpGenerator.generate(6, {
             upperCaseAlphabets: false,
             lowerCaseAlphabets: false,
             specialChars: false,
         });
-       
-        // Save the OTP in the user document
-        user.password = hashedPassword
-        user.otp = otp;
-        await user.save();
 
+        // ✅ Store in session — DO NOT save to DB yet
+        const hashedPassword = await bcrypt.hash(password, 10);
+        req.session.email = email;
+        req.session.pendingPassword = hashedPassword;  // store hashed pw temporarily
+        req.session.otp = otp;
+        req.session.otpExpiry = Date.now() + 5 * 60 * 1000; // 5 min expiry
 
-
-        // Send OTP to the user via email
+        // Send OTP email
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
@@ -733,26 +830,18 @@ const updatePasswordPost = async (req, res) => {
                 pass: 'tgua inbn eelw qljg'
             }
         });
-        const mailOptions = {
-            from: 'adnan.shajahan@gmail.com',
+
+        await transporter.sendMail({
+            from: 'adnan.shajahan786@gmail.com',
             to: email,
             subject: 'Password Reset OTP',
             text: `Your OTP for password reset is ${otp}. Please don't share it.`,
-        };
+        });
 
-        await transporter.sendMail(mailOptions);
-      
+        return res.status(200).json({ message: 'OTP sent.' }); // let frontend redirect
 
-        if(req.session.userNew){
-            req.session.updatePassword = true
-            return res.redirect('/otpPage');
-        }
-       
-
-                res.redirect('/otpPage'); // Redirect to the OTP verification page
     } catch (error) {
-        // return res.status(500).json({ message: 'Internal server error.' });
-        res.redirect('/error')
+        res.redirect('/error');
     }
 };
 
