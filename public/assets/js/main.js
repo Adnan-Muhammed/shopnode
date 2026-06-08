@@ -642,9 +642,9 @@
 		function price_slider() {
 			$("#slider-range").slider({
 				range: true,
-				min: 150,
-				max: 1800,
-				values: [150, 1800],
+				min: 50,
+				max: 800,
+				values: [50, 800],
 				slide: function(event, ui) {
 					// Update the input field dynamically during the slide event
 					$("#amount").val("₹" + ui.values[0] + " - ₹" + ui.values[1]);
