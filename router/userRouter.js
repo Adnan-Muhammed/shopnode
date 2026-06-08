@@ -48,7 +48,9 @@ router.post('/updateUserName',    userManagement.changeName)
 
 
 
-
+///////////////////////////////////////////
+////////////////PRODUCT ROUTES////////////////////////
+///////////////////////////////////
 
 const productManagement=require('../controller/productManagement')
 

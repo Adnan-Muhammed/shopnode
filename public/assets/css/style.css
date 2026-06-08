@@ -71,7 +71,7 @@ Table of Content:
 * { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
 *, ::before, ::after { box-sizing:border-box; -webkit-box-sizing:border-box; }
 html { overflow:hidden; overflow-y:auto; }
-body { font-size:13px; line-height:1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family:"Poppins",Helvetica,Tahoma,Arial,serif; color:#424242; font-weight:400; margin:0; padding:0; }
+body { font-size:13px; line-height:1.5; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-family:"Poppins",Helvetica,Tahoma,Arial,serif; color:#424242; font-weight:400; margin:0; padding:0; zoom: 110%; }
 article, aside, details, figcaption, figure, footer, header, nav, section, summary { display: block; }
 audio, canvas, video { display: inline-block; }
 audio:not([controls]) { display:none; height:0; }
@@ -116,7 +116,7 @@ h2, .h2 { font-size:19px; letter-spacing:0.03em; text-transform:uppercase; }
 h3, .h3 { font-size:16px; }
 h4, .h4 { font-size:1em; }
 h5, .h5 { font-size:18px; }
-h6, .h6 { font-size:14px; }
+h6, .h6 { font-size:14px; } 
 
 img { max-width:100%; }
 
@@ -1227,10 +1227,11 @@ input.checkbox { height:auto; vertical-align:middle; padding:0; box-shadow:none;
 /*---------------------------------------
   28.2 Home 3 - Boxed  ------------------
   ---------------------------------------*/
-.home3-boxed-layout { overflow-x:hidden; background-color:#f5f5f5; padding-bottom:60px; }
+.home3-boxed-layout { overflow-x:hidden; background-color:#f5f5f5; padding-bottom:0px; }
 .home3-boxed-layout .search { margin-left:-20px; }
 .home3-boxed-layout .container { padding-left:15px; padding-right:15px; }
-.layout-boxed { max-width:1300px; padding:0 20px; margin:0 auto; position:relative; background-color:#fff; }
+.layout-boxed { max-width:1430px; padding:0 20px; margin:0 auto; position:relative; background-color:#fff; display: flex; flex-direction: column; min-height: 100vh; }
+#page-content { flex: 1; }
 .layout-boxed .container-fluid { padding: 0 35px; }
 .layout-boxed .top-header { background:#f5f5f5; }
 .layout-boxed .top-header p, .layout-boxed .top-header a, .layout-boxed .top-header select, .layout-boxed .top-header .anm, 

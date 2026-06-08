@@ -1,4 +1,16 @@
 <%-include('header')-%>
+
+<style>
+    /* Fix for scroll jerking caused by zoom / layout shifts */
+    html {
+        overflow-y: scroll !important; 
+        scroll-behavior: smooth !important;
+    }
+    body {
+        overflow-anchor: none;
+    }
+</style>
+
 <!--Body Content-->
 <div id="page-content">
   <!--Page Title-->
